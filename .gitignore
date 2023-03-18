@@ -1,2 +1,4 @@
 env/
-.env
+SoftDesk/SoftDesk/.env
+/__pycache__/
+db.sqlite3
