@@ -14,8 +14,6 @@ class CustomProjectPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
         if not request.user.is_authenticated:
             raise LoginRequired(reverse('token_obtain_pair'))
-        if view.action == 'retrieve' and not (request.user in obj.contributors.all() or request.user == obj.author_user_id):
-            raise AccesDenied()
         #The user try to modify anything he don't own
         if request.method != 'GET' and request.user != obj.author_user_id:
             raise AccesDenied()
