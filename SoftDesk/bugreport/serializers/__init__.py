@@ -1,0 +1,6 @@
+from .project import WriteProjectSerializer, DetailsProjectSerializer, ListProjectSerializer
+from .contributor import WriteContributorSerializer, DetailsContributorSerializer, ListContributorSerializer
+from .issue import WriteIssueSerializer, DetailsIssueSerializer, ProjectListIssueSerializer
+
+DetailsProjectSerializer.contributors_connection = ListContributorSerializer(many=True)
+DetailsContributorSerializer.project = ListProjectSerializer()
