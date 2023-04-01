@@ -14,7 +14,6 @@ class BaseIssueSerializer(ModelSerializer):
             'tag',
             'priority',
             'status',
-            'created_time',  
         ]
 
 
@@ -26,6 +25,7 @@ class ProjectListIssueSerializer(BaseIssueSerializer):
     class Meta(BaseIssueSerializer.Meta):
         fields = [
             *BaseIssueSerializer.Meta.fields,
+            'created_time',  
             'author_user_id',
             'assignee_user_id'
         ]
@@ -37,6 +37,7 @@ class DetailsIssueSerializer(BaseIssueSerializer):
     class Meta(BaseIssueSerializer.Meta):
         fields = [
             *BaseIssueSerializer.Meta.fields,
+            'created_time',  
             'project',
             'author_user_id',
             'assignee_user_id'
