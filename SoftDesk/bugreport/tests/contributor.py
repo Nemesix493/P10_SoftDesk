@@ -35,3 +35,52 @@ class TestContributor(TestBugreport):
             HTTP_AUTHORIZATION=f'Bearer {user_token}'
         )
         self.assertEqual(response.status_code, 403)
+
+    @TestBugreport.use_test_set
+    def test_create_success(self):
+        list_link = reverse_lazy('bugreport:users-list', kwargs={'project_pk': self.test_set['project'].id})
+        user_token = self.get_user_tokens(0)['access']
+        response = self.client.post(
+            path=list_link,
+            data={
+                'user': self.test_set['users'][2].id,
+                'permission': 'READ',
+                'role': 'role'
+            },
+            HTTP_AUTHORIZATION=f'Bearer {user_token}'
+        )
+        self.assertEqual(response.status_code, 200)
+    
+    @TestBugreport.use_test_set
+    def test_create_error(self):
+        list_link = reverse_lazy('bugreport:users-list', kwargs={'project_pk': self.test_set['project'].id})
+        # create without auth token return 403
+        response = self.client.post(
+            path=list_link,
+            data={
+                'user': self.test_set['users'][2].id,
+                'permission': 'READ',
+                'role': 'role'
+            }
+        )
+        self.assertEqual(response.status_code, 403)
+        # create without owning project return 403
+        user_token = self.get_user_tokens(1)['access']
+        response = self.client.post(
+            path=list_link,
+            data={
+                'user': self.test_set['users'][2].id,
+                'permission': 'READ',
+                'role': 'role'
+            },
+            HTTP_AUTHORIZATION=f'Bearer {user_token}'
+        )
+        self.assertEqual(response.status_code, 403)
+        # create without data project return 400
+        user_token = self.get_user_tokens(0)['access']
+        response = self.client.post(
+            path=list_link,
+            HTTP_AUTHORIZATION=f'Bearer {user_token}'
+        )
+        self.assertEqual(response.status_code, 400)
+        
