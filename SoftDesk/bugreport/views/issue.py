@@ -27,7 +27,7 @@ class IssuesViewset(ModelViewSet):
             project = Project.objects.get(id=int(pk))
         except Project.DoesNotExist:
             raise NotFound('Project not found !')
-        if not CustomProjectPermission().has_object_permission(self.request, self, project):
+        if self.request.user not in [*project.contributors.all(), project.author_user_id]:
             raise AccesDenied()
         return project
     
@@ -78,3 +78,32 @@ class IssuesViewset(ModelViewSet):
         issue.save()
         serializer = self.details_serializer_class(issue)
         return Response(serializer.data)
+    
+    def update(self, request, project_pk=None, pk=None):
+        issue = self.get_object(pk)
+        if project_pk != issue.project.id:
+            raise BadRequest()
+        project = self.get_project(project_pk)
+        assignee_user = self.get_user(pk=request.data.get('assignee_user_id', None))
+        if not self.check_assignee_user_id(assignee_user, project):
+            raise BadRequest()
+        serializer = self.write_serializer_class(issue, data=request.data)
+        if not serializer.is_valid():
+            raise BadRequest()
+        issue = serializer.save()
+        issue.assignee_user_id = assignee_user
+        issue.save()
+        serializer = self.details_serializer_class(issue)
+        return Response(serializer.data)
+    
+    def destroy(self, request, project_pk=None, pk=None):
+        issue = self.get_object(pk)
+        if project_pk != issue.project.id:
+            raise BadRequest()
+        serializer = self.details_serializer_class(issue)
+        data = {
+            'details': 'You corectly remove the following Issue !',
+            'project': serializer.data,
+        }
+        issue.delete()
+        return Response(data)

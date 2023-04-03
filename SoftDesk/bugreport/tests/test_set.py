@@ -68,7 +68,7 @@ class TestBugreport(APITestCase):
                 user=self.test_set['users'][contrib_index],
                 **self.test_set_data['contributor']
             )
-        Issue.objects.create(
+        self.test_set['issue'] = Issue.objects.create(
             project = self.test_set['project'],
             author_user_id=self.test_set['users'][1],
             assignee_user_id=self.test_set['users'][3],
