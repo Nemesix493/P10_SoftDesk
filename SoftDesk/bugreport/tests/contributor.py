@@ -84,3 +84,28 @@ class TestContributor(TestBugreport):
         )
         self.assertEqual(response.status_code, 400)
         
+    @TestBugreport.use_test_set
+    def test_destroy_success(self):
+        detail_link = reverse_lazy('bugreport:users-detail', kwargs={'project_pk': self.test_set['project'].id, 'pk': self.test_set['users'][1].id})
+        user_token = self.get_user_tokens(0)['access']
+        response = self.client.delete(
+            path=detail_link,
+            HTTP_AUTHORIZATION=f'Bearer {user_token}'
+        )
+        self.assertEqual(response.status_code, 200)
+    
+    @TestBugreport.use_test_set
+    def test_destroy_error(self):
+        detail_link = reverse_lazy('bugreport:users-detail', kwargs={'project_pk': self.test_set['project'].id, 'pk': self.test_set['users'][1].id})
+        # create without auth token return 403
+        response = self.client.delete(
+            path=detail_link,
+        )
+        self.assertEqual(response.status_code, 403)
+        # create without owning project return 403
+        user_token = self.get_user_tokens(1)['access']
+        response = self.client.delete(
+            path=detail_link,
+            HTTP_AUTHORIZATION=f'Bearer {user_token}'
+        )
+        self.assertEqual(response.status_code, 403)
