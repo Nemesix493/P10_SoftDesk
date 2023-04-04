@@ -20,6 +20,7 @@ class WriteCommentSerializer(BaseCommentSerializer, WriteSerializer):
 class IssueListCommentSerializer(BaseCommentSerializer):
     class Meta(BaseCommentSerializer.Meta):
         fields = [
+            'id',
             *BaseCommentSerializer.Meta.fields,
             'author_user_id',
             'created_time'
@@ -30,6 +31,7 @@ class DetailsCommentSerializer(BaseCommentSerializer):
     author_user_id = SimpleUserSerializer()
     class Meta(BaseCommentSerializer.Meta):
         fields = [
+            'id',
             *BaseCommentSerializer.Meta.fields,
             'author_user_id',
             'issue_id',

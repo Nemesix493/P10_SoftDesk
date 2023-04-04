@@ -34,4 +34,7 @@ class CustomIssuePermission(CustomBasePermission):
         if request.method != 'GET' and request.user != obj.author_user_id:
             raise AccesDenied()
         return True
+
+class CustomCommentPermission(CustomBasePermission):
+    pass
     
