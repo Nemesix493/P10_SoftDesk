@@ -70,4 +70,17 @@ class Issue(models.Model):
         on_delete=models.CASCADE
     )
 
-    
+
+class Comment(models.Model):
+    description = models.CharField(max_length=300)
+    author_user_id = models.ForeignKey(
+        to=UserModel,
+        related_name='comments',
+        on_delete=models.CASCADE
+    )
+    issue_id = models.ForeignKey(
+        to=Issue,
+        related_name='comments',
+        on_delete=models.CASCADE
+    )
+    created_time = models.DateTimeField(auto_now_add=True)

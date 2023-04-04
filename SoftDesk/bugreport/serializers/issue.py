@@ -40,5 +40,6 @@ class DetailsIssueSerializer(BaseIssueSerializer):
             'created_time',  
             'project',
             'author_user_id',
-            'assignee_user_id'
+            'assignee_user_id',
+            'comments'
         ]
