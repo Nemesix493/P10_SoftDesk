@@ -66,3 +66,11 @@ class CommentViewset(ModelViewSet):
         comment.issue_id = issue
         comment.save()
         return Response(self.details_serializer_class(comment).data)
+    
+    def list(self, request, project_pk=None, issue_pk=None):
+        project = self.get_project(project_pk)
+        issue = self.get_issue(issue_pk)
+        if issue.project != project:
+            raise BadRequest()
+        serializer =  self.list_serializer_class(issue.comments, many=True)
+        return Response(serializer.data)

@@ -2,7 +2,7 @@ from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
 
-from ..models import Project, Contributor, Issue
+from ..models import Project, Contributor, Issue, Comment
 
 UserModel = get_user_model()
 
@@ -73,6 +73,11 @@ class TestBugreport(APITestCase):
             author_user_id=self.test_set['users'][1],
             assignee_user_id=self.test_set['users'][3],
             **self.test_set_data['issue']
+        )
+        self.test_set['comment'] = Comment.objects.create(
+            issue_id=self.test_set['issue'],
+            author_user_id=self.test_set['users'][3],
+            description='description'
         )
 
             
