@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, Field
 
 from ..models import Issue
 from .base import WriteSerializer
@@ -32,26 +32,25 @@ class ProjectListIssueSerializer(BaseIssueSerializer):
 
 
 class DetailsIssueSerializer(BaseIssueSerializer):
-    author_user_id = SimpleUserSerializer()
-    assignee_user_id = SimpleUserSerializer()
+    author_user = SimpleUserSerializer(source='author_user_id')
+    assignee_user = SimpleUserSerializer(source='assignee_user_id')
     class Meta(BaseIssueSerializer.Meta):
         fields = [
             *BaseIssueSerializer.Meta.fields,
             'created_time',  
             'project',
-            'author_user_id',
-            'assignee_user_id',
+            'author_user',
+            'assignee_user',
             'comments'
         ]
 
 class CommentDetailsIssueSerializer(BaseIssueSerializer):
-    author_user_id = SimpleUserSerializer()
-    assignee_user_id = SimpleUserSerializer()
+    project_id = Field(source='project')
     class Meta(BaseIssueSerializer.Meta):
         fields = [
             *BaseIssueSerializer.Meta.fields,
             'created_time',  
-            'project',
+            'project_id',
             'author_user_id',
             'assignee_user_id'
         ]

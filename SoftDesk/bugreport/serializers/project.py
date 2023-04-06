@@ -20,13 +20,13 @@ class WriteProjectSerializer(BaseProjectSerializer, WriteSerializer):
 
 
 class DetailsProjectSerializer(BaseProjectSerializer):
-    author_user_id = SimpleUserSerializer()
+    author_user = SimpleUserSerializer(source='author_user_id')
     class Meta(BaseProjectSerializer.Meta):
         fields = [
             *BaseProjectSerializer.Meta.fields,
             'id',
-            'author_user_id',
-            'contributors_connection'
+            'author_user',
+            'contributors'
         ]
 
 

@@ -3,7 +3,7 @@ from .contributor import WriteContributorSerializer, DetailsContributorSerialize
 from .issue import WriteIssueSerializer, DetailsIssueSerializer, ProjectListIssueSerializer, CommentDetailsIssueSerializer
 from .comment import WriteCommentSerializer, IssueListCommentSerializer, DetailsCommentSerializer
 
-DetailsProjectSerializer.contributors_connection = ListContributorSerializer(many=True)
+DetailsProjectSerializer.contributors = ListContributorSerializer(many=True, source='contributors_connection')
 DetailsContributorSerializer.project = ListProjectSerializer()
 DetailsIssueSerializer.comments = IssueListCommentSerializer(many=True)
-DetailsCommentSerializer.issue_id = CommentDetailsIssueSerializer()
+DetailsCommentSerializer.issue = CommentDetailsIssueSerializer(source='issue_id')
