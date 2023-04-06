@@ -49,7 +49,7 @@ class CommentViewset(ModelViewSet):
             comment = Comment.objects.get(id=int(pk))
         except Comment.DoesNotExist:
             raise NotFound('Comment not found !')
-        if not self.check_object_permissions(self.request, comment):
+        if self.check_object_permissions(self.request, comment):
             raise AccesDenied()
         return comment
 
@@ -74,3 +74,42 @@ class CommentViewset(ModelViewSet):
             raise BadRequest()
         serializer =  self.list_serializer_class(issue.comments, many=True)
         return Response(serializer.data)
+    
+    def update(self, request, project_pk=None, issue_pk=None, pk=None):
+        project = self.get_project(project_pk)
+        issue = self.get_issue(issue_pk)
+        comment = self.get_object(pk)
+        serializer = self.write_serializer_class(
+            comment,
+            data=request.data
+        )
+        if issue.project != project or comment not in issue.comments.all():
+            raise BadRequest()
+        if not serializer.is_valid():
+            raise BadRequest()
+        comment = serializer.save()
+        return Response(self.details_serializer_class(comment).data)
+
+    def destroy(self, request, project_pk=None, issue_pk=None, pk=None):
+        project = self.get_project(project_pk)
+        issue = self.get_issue(issue_pk)
+        comment = self.get_object(pk)
+        if issue.project != project or comment not in issue.comments.all():
+            raise BadRequest()
+        serializer = self.details_serializer_class(comment)
+        data = {
+            'details': 'You corectly remove the following Issue !',
+            'project': serializer.data,
+        }
+        comment.delete()
+        return Response(data)
+    
+    def retrieve(self, request, project_pk=None, issue_pk=None, pk=None):
+        project = self.get_project(project_pk)
+        issue = self.get_issue(issue_pk)
+        comment = self.get_object(pk)
+        if issue.project != project or comment not in issue.comments.all():
+            raise BadRequest()
+        serializer = self.details_serializer_class(comment)
+        return Response(serializer.data)
+

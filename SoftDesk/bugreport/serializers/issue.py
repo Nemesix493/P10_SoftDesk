@@ -43,3 +43,15 @@ class DetailsIssueSerializer(BaseIssueSerializer):
             'assignee_user_id',
             'comments'
         ]
+
+class CommentDetailsIssueSerializer(BaseIssueSerializer):
+    author_user_id = SimpleUserSerializer()
+    assignee_user_id = SimpleUserSerializer()
+    class Meta(BaseIssueSerializer.Meta):
+        fields = [
+            *BaseIssueSerializer.Meta.fields,
+            'created_time',  
+            'project',
+            'author_user_id',
+            'assignee_user_id'
+        ]

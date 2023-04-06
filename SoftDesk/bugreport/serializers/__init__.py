@@ -1,8 +1,9 @@
 from .project import WriteProjectSerializer, DetailsProjectSerializer, ListProjectSerializer
 from .contributor import WriteContributorSerializer, DetailsContributorSerializer, ListContributorSerializer
-from .issue import WriteIssueSerializer, DetailsIssueSerializer, ProjectListIssueSerializer
+from .issue import WriteIssueSerializer, DetailsIssueSerializer, ProjectListIssueSerializer, CommentDetailsIssueSerializer
 from .comment import WriteCommentSerializer, IssueListCommentSerializer, DetailsCommentSerializer
 
 DetailsProjectSerializer.contributors_connection = ListContributorSerializer(many=True)
 DetailsContributorSerializer.project = ListProjectSerializer()
 DetailsIssueSerializer.comments = IssueListCommentSerializer(many=True)
+DetailsCommentSerializer.issue_id = CommentDetailsIssueSerializer()
