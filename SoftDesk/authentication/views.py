@@ -27,7 +27,7 @@ def create_user(request):
             )
         user.set_password(password)
         user.save()
-        return Response(user_serializer.data)
+        return Response(UserModelSerializer(user).data)
     return Response(
                 {
                     'details': 'data not valid',

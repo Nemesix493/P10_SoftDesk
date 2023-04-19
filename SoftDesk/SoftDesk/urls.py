@@ -20,10 +20,8 @@ from authentication.views import create_user
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('bugreport/', include('bugreport.urls', namespace='bugreport')),
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('drf/', include('rest_framework.urls')),
     path('signup/', create_user, name='signup')
 ]
