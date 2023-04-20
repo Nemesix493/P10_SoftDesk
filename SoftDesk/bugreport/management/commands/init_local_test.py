@@ -21,15 +21,18 @@ PROJECTS = [
 USERS = [
     {
         'first_name': 'Daniel',
-        'password': 'motdepasse'
+        'password': 'motdepasse',
+        'last_name': 'last-name'
     },
     {
         'first_name': 'Serge',
-        'password': 'motdepasse'
+        'password': 'motdepasse',
+        'last_name': 'last-name'
     },
     {
         'first_name': 'Claude',
-        'password': 'motdepasse'
+        'password': 'motdepasse',
+        'last_name': 'last-name'
     },
 ]
 
@@ -44,7 +47,9 @@ class Command(BaseCommand):
         adm.set_password(ADMIN_PASSWORD)
         adm.save()
         for user in USERS:
-            current_user = UserModel.objects.create(email=user['first_name'] + '@oc.drf')
+            current_user = UserModel.objects.create(email=user['first_name'] + '@SoftDesk.com')
+            current_user.first_name = user['first_name']
+            current_user.last_name = user['last_name']
             current_user.set_password(user['password'])
             current_user.save()
             for serialized_project in PROJECTS:

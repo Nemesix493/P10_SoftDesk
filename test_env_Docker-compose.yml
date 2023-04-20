@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+  test-env-softdesk-app:
+    build:
+      context: .
+      dockerfile: test_env_Dockerfile
+    ports:
+      - "8000:8000"
